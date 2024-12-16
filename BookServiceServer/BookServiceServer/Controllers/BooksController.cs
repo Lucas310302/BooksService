@@ -21,11 +21,6 @@ public class BooksController : ControllerBase
     [HttpGet]
     public IActionResult GetBooks()
     {
-        //return new List<Book>
-        //{
-        //    new Book { Id = 1, Title = "The Great Gatsby", Author = "F. Scott Fitzgerald", IsAvailable = true },
-        //    new Book { Id = 2, Title = "1984", Author = "George Orwell", IsAvailable = false }
-        //};
         return Ok(_bookService.GetBooks());
     }
 

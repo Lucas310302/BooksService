@@ -28,8 +28,12 @@ namespace BookServiceClient
         {
             InitializeComponent();
 
-            // Initialize HttpClient with server URL
-            _httpClient = new HttpClient { BaseAddress = new Uri("http://localhost:64027") };
+            var handler = new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+            };
+
+            _httpClient = new HttpClient(handler) { BaseAddress = new Uri("https://localhost:7275") };
 
             // Load Books on startup
             LoadBooks();
@@ -40,11 +44,12 @@ namespace BookServiceClient
             try
             {
                 var books = await _httpClient.GetFromJsonAsync<List<Book>>("api/Books");
-                MessageBox.Show(books.Count.ToString());
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Can't fetch books");
+                MessageBox.Show("Can't fetch books; " + ex);
+                Clipboard.SetText(ex.ToString());
+                Console.WriteLine(ex);
             }
         }
 
