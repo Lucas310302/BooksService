@@ -13,21 +13,42 @@ public class BooksController : ControllerBase
     public BooksController(BooksService bookService)
     {
         _bookService = bookService;
-
-        _bookService.AddBook(new Book { Id = 1, Title = "The Great Gatsby", Author = "F. Scott Fitzgerald", IsAvailable = true });
-        _bookService.AddBook(new Book { Id = 2, Title = "1984", Author = "George Orwell", IsAvailable = false });
     }
 
     [HttpGet]
-    public IActionResult GetBooks()
+    public async Task<IActionResult> GetBooks()
     {
-        return Ok(_bookService.GetBooks());
+        var books = await _bookService.GetBooksAsync();
+        return Ok(books);
     }
 
     [HttpPost]
-    public IActionResult AddBook([FromBody] Book book)
+    [Route("add")]
+    public async Task<IActionResult> AddBook([FromBody] Book book)
     {
-        _bookService.AddBook(book);
-        return CreatedAtAction(nameof(GetBooks), new { id = book.Id }, book);
+        if (book == null)
+            return BadRequest("Book cannot be null");
+
+        try
+        {
+            await _bookService.AddBookAsync(book);
+            return CreatedAtAction(nameof(GetBooks), new { id = book.Id }, book);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Internal server error: {ex.Message}");
+        }
+    }
+
+    [HttpGet]
+    [Route("search")]
+    public async Task<IActionResult> SearchBooks([FromQuery] string query)
+    {
+        var books = await _bookService.SearchBooksAsync(query);
+
+        if (!books.Any())
+            return NotFound("No Books matched search :(");
+
+        return Ok(books);
     }
 }

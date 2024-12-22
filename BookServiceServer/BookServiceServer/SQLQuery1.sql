@@ -1,0 +1,23 @@
+--drop table Mybooks
+--create table MyBooks ( Id int, Title varchar(1000), Author varchar(100), IsAvailable BIT)
+--Insert into MyBooks ( Id , Title , Author , IsAvailable ) values  (1, 'Lucas eventyr', 'Lucas Rønnebro', 1);
+--Insert into MyBooks ( Id , Title , Author , IsAvailable  ) values  (2, 'Lucas eventyr2', 'Lucas Rønnebro', 1);
+--select * from Mybooks;
+--USE MyBooks;
+--CREATE LOGIN [DESKTOP-CM7DHI4\lucas] FROM WINDOWS;
+--CREATE USER [DESKTOP-CM7DHI4\lucas] FOR LOGIN [DESKTOP-CM7DHI4\lucas];
+--ALTER ROLE db_owner ADD MEMBER [DESKTOP-CM7DHI4\lucas];
+--SELECT TABLE_SCHEMA, TABLE_NAME 
+--FROM INFORMATION_SCHEMA.TABLES 
+--WHERE TABLE_NAME = 'MyBooks';
+SELECT * FROM dbo.MyBooks
+--FROM dbo.MyBooks
+--WHERE Id IS NULL OR Title IS NULL OR Author IS NULL OR IsAvailable IS NULL;
+--DELETE FROM dbo.MyBooks
+--ALTER TABLE MyBooks ADD Id int
+--DROP TABLE MyBooks
+--ALTER TABLE dbo.MyBooks
+--DROP COLUMN Id;
+
+--ALTER TABLE dbo.MyBooks
+--ADD Id INT IDENTITY(1,1) NOT NULL;
