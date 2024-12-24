@@ -12,5 +12,6 @@ namespace BookServiceServer.Models
         
         public string Author { get; set; }
         public bool? IsAvailable { get; set; }
+        public byte[] PDFfile { get; set; }
     }
 }

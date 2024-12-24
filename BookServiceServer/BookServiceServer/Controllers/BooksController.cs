@@ -24,20 +24,21 @@ public class BooksController : ControllerBase
 
     [HttpPost]
     [Route("add")]
-    public async Task<IActionResult> AddBook([FromBody] Book book)
+    public async Task<IActionResult> AddBook([FromBody] Book book, IFormFile pdfFile)
     {
-        if (book == null)
+        if (book == null )
             return BadRequest("Book cannot be null");
 
-        try
+        // Adding pdf file to book
+        using (var memorystream = new MemoryStream())
         {
-            await _bookService.AddBookAsync(book);
-            return CreatedAtAction(nameof(GetBooks), new { id = book.Id }, book);
+            await pdfFile.CopyToAsync(memorystream);
+            book.PDFfile = memorystream.ToArray();
         }
-        catch (Exception ex)
-        {
-            return StatusCode(500, $"Internal server error: {ex.Message}");
-        }
+
+        // Save to database
+        await _bookService.AddBookAsync(book);
+        return CreatedAtAction(nameof(GetBooks), new { id = book.Id }, book);
     }
 
     [HttpGet]

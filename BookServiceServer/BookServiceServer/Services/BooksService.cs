@@ -10,9 +10,9 @@ namespace BookServiceServer.Services
 {
     public class BooksService
     {
-        private readonly BooksDbContext _context;
+        private readonly Data.BooksDbContext _context;
 
-        public BooksService(BooksDbContext context)
+        public BooksService(Data.BooksDbContext context)
         {
             _context = context;
         }
