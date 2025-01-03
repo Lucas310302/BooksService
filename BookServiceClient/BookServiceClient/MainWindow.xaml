@@ -19,22 +19,22 @@
                 <WrapPanel x:Name="BooksPanel" Height="auto" Width="771"/>
             </ScrollViewer>
         </Grid>
-        <Grid x:Name="HeaderGrid" Height="66" VerticalAlignment="Top" HorizontalAlignment="Center" Width="800" Grid.RowSpan="2" d:IsHidden="True">
+        <Grid x:Name="HeaderGrid" Height="66" VerticalAlignment="Top" HorizontalAlignment="Center" Width="800" Grid.RowSpan="2">
             <Rectangle x:Name="HeaderRect" Height="70" Stroke="Black" VerticalAlignment="Bottom" HorizontalAlignment="Center" Width="810" Margin="0,0,0,-2"/>
             <TextBlock x:Name="HeaderTitle" Margin="313,0,309,0" TextWrapping="Wrap" Height="42" FontSize="30" Foreground="#FF22476D" VerticalAlignment="Center"><Run Text="Bog"/><Run Language="da-dk" Text="-"/><Run Text="Shop."/><Run Language="da-dk" Text="DK"/><LineBreak/><Run Language="da-dk"/></TextBlock>
-            <TextBox x:Name="SearchInput" helpers:WatermarkHelper.Watermark="Search..." KeyDown="SearchBooks_KeyDown" Margin="583,0,0,0" TextWrapping="Wrap" Width="186" Height="19" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-            <Button x:Name="ViewAllBooks" Content="View All Books -&gt;" Height="42" Background="White" Margin="0,0,534,0" VerticalAlignment="Center" HorizontalAlignment="Right" Width="144" Click="ViewAllBooks_Click"/>
-            <Button x:Name="AdminBtn" Content="Admin" Height="42" Background="White" Margin="0,0,707,0" VerticalAlignment="Center" HorizontalAlignment="Right" Width="72" Click="OpenAccPanel_Click"/>
+            <TextBox x:Name="SearchInput" helpers:WatermarkHelper.Watermark="Search..." KeyDown="SearchBooks_KeyDown" Margin="549,0,0,0" TextWrapping="Wrap" Width="200" Height="24" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="14"/>
+            <Button x:Name="ViewAllBooks" Cursor="Hand" Content="View All Books -&gt;" Height="42" Background="White" Margin="0,0,534,0" VerticalAlignment="Center" HorizontalAlignment="Right" Width="144" Click="ViewAllBooks_Click"/>
+            <Button x:Name="AdminBtn" Cursor="Hand" Content="Admin" Height="42" Background="White" Margin="0,0,707,0" VerticalAlignment="Center" HorizontalAlignment="Right" Width="72" Click="OpenAccPanel_Click"/>
         </Grid>
         <Grid x:Name="LoginGrid" Grid.RowSpan="2" d:IsHidden="True">
             <Rectangle x:Name="Header_1" Height="70" Stroke="Black" VerticalAlignment="Top" HorizontalAlignment="Center" Width="810" Margin="0,-2,0,0"/>
             <TextBlock x:Name="LoginTitle" HorizontalAlignment="Center" Margin="0,10,0,0" TextWrapping="Wrap" Text="Login" VerticalAlignment="Top" Height="42" Width="182" FontSize="30" TextAlignment="Center"/>
             <TextBox x:Name="LoginUsernameInput" helpers:WatermarkHelper.Watermark="Username..." HorizontalAlignment="Center" Margin="0,132,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="182" Height="28" FontSize="15" VerticalContentAlignment="Center"/>
             <TextBox x:Name="LoginPasswordInput" helpers:WatermarkHelper.Watermark="Password..." HorizontalAlignment="Center" Margin="0,165,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="182" Height="28" FontSize="15" VerticalContentAlignment="Center"/>
-            <Button x:Name="LoginSubmitButton" Content="Login" IsDefault="True" HorizontalAlignment="Center" VerticalAlignment="Top" Height="30" Width="121" Margin="0,217,0,0" BorderBrush="Black" Background="White" FontSize="15" VerticalContentAlignment="Center" Click="LoginButton_Click"/>
+            <Button x:Name="LoginSubmitButton" Cursor="Hand" Content="Login" IsDefault="True" HorizontalAlignment="Center" VerticalAlignment="Top" Height="30" Width="121" Margin="0,217,0,0" BorderBrush="Black" Background="White" FontSize="15" VerticalContentAlignment="Center" Click="LoginButton_Click"/>
             <Button x:Name="GotoSignupButton" Cursor="Hand" Content="Goto Signup" HorizontalAlignment="Center" VerticalAlignment="Top" Height="23" Width="96" Margin="0,252,0,0" BorderBrush="{x:Null}" Background="White" VerticalContentAlignment="Center" Click="GotoSignupPage_Click" HorizontalContentAlignment="Center"/>
         </Grid>
-        <Grid x:Name="SignupGrid" Grid.RowSpan="2">
+        <Grid x:Name="SignupGrid" Grid.RowSpan="2" d:IsHidden="True">
             <Rectangle x:Name="Header_2" Height="70" Stroke="Black" VerticalAlignment="Top" HorizontalAlignment="Center" Width="810" Margin="0,-2,0,0"/>
             <TextBlock x:Name="SignupTitle" HorizontalAlignment="Center" Margin="0,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="42" Width="182" FontSize="30" TextAlignment="Center"><Run Text="Sign up"/><LineBreak/><Run/></TextBlock>
             <TextBox x:Name="SignUpUsernameInput" helpers:WatermarkHelper.Watermark="Username..." HorizontalAlignment="Center" Margin="0,132,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="182" Height="28" FontSize="15" VerticalContentAlignment="Center"/>

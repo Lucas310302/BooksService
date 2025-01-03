@@ -14,10 +14,10 @@
             <Rectangle x:Name="HeaderRect" Height="70" Stroke="Black" VerticalAlignment="Top" HorizontalAlignment="Center" Width="500" Margin="0,-2,0,0"/>
 
         </Grid>
-        <Grid x:Name="StartMenu" d:IsHidden="True" d:IsLocked="True">
-            <Button x:Name="AddButton" Content="&lt;Add Book&gt;" HorizontalAlignment="Center" Margin="0,104,0,0" VerticalAlignment="Top" Height="54" Width="148" Background="White" FontSize="18" Click="GotoAddBookPage_Click"/>
-            <Button x:Name="RemoveButton" Content="&lt;Remove Book&gt;" HorizontalAlignment="Center" VerticalAlignment="Top" Height="54" Width="148" Background="White" FontSize="18" Margin="0,217,0,0" Click="GotoRemovePage_Click"/>
-            <Button x:Name="ModifyButton" Content="&lt;Modify Book&gt;" Margin="0,333,0,0" VerticalAlignment="Top" Height="54" Background="White" FontSize="18" HorizontalAlignment="Center" Width="148" Click="GotoModifyPage_Click"/>
+        <Grid x:Name="StartMenu">
+            <Button x:Name="AddButton" Cursor="Hand" Content="&lt;Add Book&gt;" HorizontalAlignment="Center" Margin="0,109,0,0" VerticalAlignment="Top" Height="54" Width="148" Background="White" FontSize="18" Click="GotoAddBookPage_Click"/>
+            <Button x:Name="RemoveButton" Cursor="Hand" Content="&lt;Remove Book&gt;" HorizontalAlignment="Center" VerticalAlignment="Top" Height="54" Width="148" Background="White" FontSize="18" Margin="0,188,0,0" Click="GotoRemovePage_Click"/>
+            <Button x:Name="ModifyButton" Cursor="Hand" Content="&lt;Modify Book&gt;" Margin="0,270,0,0" VerticalAlignment="Top" Height="54" Background="White" FontSize="18" HorizontalAlignment="Center" Width="148" Click="GotoModifyPage_Click"/>
         </Grid>
         <Grid x:Name="AddMenu" d:IsHidden="True" d:IsLocked="True">
             <Grid.RowDefinitions>
@@ -32,16 +32,16 @@
             <Label x:Name="IsAvailableLabel" Content="Book Available:" Margin="10,0,0,113" VerticalContentAlignment="Center" HorizontalAlignment="Left" Width="120" Height="26" VerticalAlignment="Bottom"/>
             <CheckBox x:Name="IsAvailabelCheckBox" Content="" Margin="98,0,0,117" HorizontalAlignment="Left" Width="17" Height="16" VerticalAlignment="Bottom"/>
             <Label x:Name="PDFUploadLabel" Content="Upload PDF:" Margin="10,0,0,80" VerticalContentAlignment="Center" HorizontalAlignment="Left" Width="120" Height="26" VerticalAlignment="Bottom"/>
-            <Button x:Name="PDFUpload" Content="CLICK TO UPLOAD" HorizontalAlignment="Left" Margin="98,0,0,81" VerticalAlignment="Bottom" Height="25" Width="317" Background="White" Click="UploadPDF_Click"/>
-            <Button x:Name="BookUpload" Content="SUBMIT BOOK UPLOAD" HorizontalAlignment="Left" Margin="98,0,0,101" VerticalAlignment="Bottom" Height="25" Width="317" Background="White" Click="SubmitBook_Click" Grid.RowSpan="2"/>
+            <Button x:Name="PDFUpload" Cursor="Hand" Content="CLICK TO UPLOAD" HorizontalAlignment="Left" Margin="98,0,0,81" VerticalAlignment="Bottom" Height="25" Width="317" Background="White" Click="UploadPDF_Click"/>
+            <Button x:Name="BookUpload" Cursor="Hand" Content="SUBMIT BOOK UPLOAD" HorizontalAlignment="Left" Margin="98,0,0,101" VerticalAlignment="Bottom" Height="25" Width="317" Background="White" Click="SubmitBook_Click" Grid.RowSpan="2"/>
         </Grid>
         <Grid x:Name="RemoveMenu" d:IsHidden="True" d:IsLocked="True">
             <Label x:Name="RemoveMenuTItle" Content="REMOVE PANEL" Margin="119,66,119,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="20" Height="45" VerticalAlignment="Top"/>
             <Label x:Name="IDsRemoveTitle" Content="ID(s) to be removed:" Margin="10,0,0,283" VerticalContentAlignment="Center" Height="26" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="120"/>
             <TextBox x:Name="IDsRemoveInput" helpers:WatermarkHelper.Watermark="e.g. (1) (1,2,3,4,5) (1-5)" TextWrapping="Wrap" Margin="0,151,0,0" HorizontalAlignment="Center" Width="480" Height="92" VerticalAlignment="Top"/>
-            <Button x:Name="BookUpload_Copy" Content="SUBMIT BOOK DELETION" HorizontalAlignment="Left" Margin="98,0,0,101" VerticalAlignment="Bottom" Height="25" Width="317" Background="White" Click="SubmitDelete_Click"/>
+            <Button x:Name="BookUpload_Copy" Cursor="Hand" Content="SUBMIT BOOK DELETION" HorizontalAlignment="Left" Margin="98,0,0,101" VerticalAlignment="Bottom" Height="25" Width="317" Background="White" Click="SubmitDelete_Click"/>
         </Grid>
-        <Grid x:Name="ModifyMenu">
+        <Grid x:Name="ModifyMenu" d:IsHidden="True" d:IsLocked="True">
             <Label x:Name="ModifyMenuTItle" Content="MODIFY PANEL" Margin="119,66,119,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="20" Height="45" VerticalAlignment="Top"/>
             <Label x:Name="BookIDLabel" Content="CURRENT BOOK ID:" Margin="10,0,0,282" VerticalContentAlignment="Center" Height="26" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="120"/>
             <TextBox x:Name="BookIDInput" helpers:WatermarkHelper.Watermark="Current ID..." TextWrapping="Wrap" Margin="130,0,0,283" HorizontalAlignment="Left" Width="285" Height="24" VerticalAlignment="Bottom"/>
@@ -52,8 +52,8 @@
             <Label x:Name="ModifyIsAvailableLabel" Content="Modify Available:" Margin="10,0,0,193" VerticalContentAlignment="Center" HorizontalAlignment="Left" Width="120" Height="26" VerticalAlignment="Bottom"/>
             <CheckBox x:Name="ModifyIsAvailableCheckBox" Content="" Margin="113,0,0,197" HorizontalAlignment="Left" Width="17" Height="16" VerticalAlignment="Bottom"/>
             <Label x:Name="ModifyPDFLabel" Content="Modify PDF:" Margin="10,0,0,160" VerticalContentAlignment="Center" HorizontalAlignment="Left" Width="120" Height="26" VerticalAlignment="Bottom"/>
-            <Button x:Name="ModifyPDFUpload" Content="CLICK TO UPLOAD" HorizontalAlignment="Left" Margin="113,0,0,161" VerticalAlignment="Bottom" Height="25" Width="302" Background="White" Click="ModifyPDF_Click"/>
-            <Button x:Name="ModifyBookUpload" Content="SUBMIT MODIFED BOOK" HorizontalAlignment="Left" Margin="98,0,0,101" VerticalAlignment="Bottom" Height="25" Width="317" Background="White" Click="SubmitModifyBook_Click"/>
+            <Button x:Name="ModifyPDFUpload" Cursor="Hand" Content="CLICK TO UPLOAD" HorizontalAlignment="Left" Margin="113,0,0,161" VerticalAlignment="Bottom" Height="25" Width="302" Background="White" Click="ModifyPDF_Click"/>
+            <Button x:Name="ModifyBookUpload" Cursor="Hand" Content="SUBMIT MODIFED BOOK" HorizontalAlignment="Left" Margin="98,0,0,101" VerticalAlignment="Bottom" Height="25" Width="317" Background="White" Click="SubmitModifyBook_Click"/>
         </Grid>
     </Grid>
 </Window>

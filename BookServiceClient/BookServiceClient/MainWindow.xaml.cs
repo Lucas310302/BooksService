@@ -86,9 +86,8 @@ namespace BookServiceClient
             foreach (var book in books)
             {
                 // Create horizontal stackpanel for pdf button
-                StackPanel outerStackPanel = new StackPanel
+                DockPanel outerStackPanel = new DockPanel
                 {
-                    Orientation = Orientation.Horizontal,
                     HorizontalAlignment = HorizontalAlignment.Stretch
                 };
 
@@ -122,7 +121,9 @@ namespace BookServiceClient
                     Source = new BitmapImage(new Uri("pack://application:,,,/icons/pdf.png")),
                     Width = 35,
                     Height = 35,
-                    HorizontalAlignment = HorizontalAlignment.Right
+                    Cursor = Cursors.Hand,
+                    HorizontalAlignment = HorizontalAlignment.Right,
+                    ToolTip = "Download PDF"
                 };
 
                 // Setup clickevent
@@ -259,7 +260,11 @@ namespace BookServiceClient
                         if (ParseJwtToken() == "Admin")
                             AdminBtn.Visibility = Visibility.Visible;
                         else
+                        {
                             AdminBtn.Visibility = Visibility.Collapsed;
+                            ViewAllBooks.Margin = new Thickness(0, 0, 580, 0);
+                            ViewAllBooks.Width = 200;
+                        }
                     }
                     else
                     {
