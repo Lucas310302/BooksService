@@ -138,6 +138,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Dtos\SignupDto.cs" />
     <Compile Include="Helpers\WatermarkHelper.cs" />
     <Page Include="AdminPanel.xaml">
       <SubType>Designer</SubType>

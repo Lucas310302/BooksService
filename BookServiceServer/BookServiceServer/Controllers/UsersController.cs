@@ -18,6 +18,8 @@ namespace BookServiceServer.Controllers
         [HttpPost("signup")]
         public async Task<IActionResult> SignUp([FromBody] SignUpDto signupDto)
         {
+            Console.WriteLine("vla");
+
             var results = await _userService.RegisterUserAsync(signupDto);
             if (!results.Success)
             {

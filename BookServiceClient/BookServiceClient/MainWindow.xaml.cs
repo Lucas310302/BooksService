@@ -37,6 +37,7 @@ namespace BookServiceClient
             InitializeComponent();
 
             LoginGrid.Visibility = Visibility.Visible;
+            SignupGrid.Visibility = Visibility.Collapsed;
             HeaderGrid.Visibility = Visibility.Collapsed;
             BooksGrid.Visibility = Visibility.Collapsed;
 
@@ -163,7 +164,6 @@ namespace BookServiceClient
             // Check if search query is empty
             if (string.IsNullOrWhiteSpace(searchInput))
             {
-                MessageBox.Show("Please fill out the search field");
                 return;
             }
 
@@ -218,12 +218,12 @@ namespace BookServiceClient
 
         private async void LoginButton_Click(object sender, RoutedEventArgs e)
         {
-            var username = UsernameInput.Text;
-            var password = PasswordInput.Text;
+            var username = LoginUsernameInput.Text;
+            var password = LoginPasswordInput.Text;
 
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
             {
-                MessageBox.Show("Please fill out both username and password");
+                MessageBox.Show("Please fill out both username and password", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
@@ -279,6 +279,62 @@ namespace BookServiceClient
             {
                 MessageBox.Show($"An Error Occured: {ex.Message}");
             }
+        }
+
+        // Change page to sign up
+        private void GotoSignupPage_Click(object sender, RoutedEventArgs args)
+        {
+            LoginGrid.Visibility = Visibility.Collapsed;
+            SignupGrid.Visibility = Visibility.Visible;
+        }
+
+        private async void SignUpButton_Click(object sender, RoutedEventArgs args)
+        {
+            var username = SignUpUsernameInput.Text;
+            var password = SignUpPasswordInput.Text;
+            var confirmpassword = SignUpConfirmPasswordInput.Text;
+
+            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password) || string.IsNullOrEmpty(confirmpassword))
+            {
+                MessageBox.Show("Please fill out all fields", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            if (confirmpassword != password)
+            {
+                MessageBox.Show("Passwords do not match", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            // Create signup dto
+            var signupDto = new SignupDto
+            {
+                Username = username,
+                Password = password,
+            };
+
+            try
+            {
+                var response = await _httpClient.PostAsJsonAsync("api/users/signup", signupDto);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    MessageBox.Show("User Created :)", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    SignupGrid.Visibility = Visibility.Collapsed;
+                    LoginGrid.Visibility = Visibility.Visible;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        // Change page to login
+        private void GotoLoginPage_Click(object sender, RoutedEventArgs args)
+        {
+            SignupGrid.Visibility = Visibility.Collapsed;
+            LoginGrid.Visibility = Visibility.Visible;
         }
 
         private void OpenAccPanel_Click(object sender, RoutedEventArgs e)
