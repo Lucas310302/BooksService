@@ -1,4 +1,3 @@
 --Tables: MyBooks, Users
 --CREATE TABLE Users ( Id INT IDENTITY (1, 1), Username nvarchar(100) unique not null, PasswordHash nvarchar(max) not null, Role NVARCHAR(50) default 'User' NOT NULL, CreatedAt DATETIME2 DEFAULT GETDATE())
---SELECT * FROM Users
---INSERT INTO Users (Username, PasswordHash, CreatedAt) values ('Annd2', 'adnnnd', GETDATE())
+--CREATE TABLE MyBooks ( Id INT IDENTITY (1, 1), Title varchar(1000), Author varchar(100), IsAvailable bit, PDFfile varbinary(max))

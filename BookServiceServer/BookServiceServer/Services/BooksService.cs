@@ -30,6 +30,18 @@ namespace BookServiceServer.Services
             await _context.SaveChangesAsync();
         }
 
+        // Gets book id from controller and then removes book
+        public async Task RemoveBookAsync(int id)
+        {
+            var book = await _context.MyBooks.FindAsync(id);
+            if (book != null)
+            {
+                _context.MyBooks.Remove(book); // Mark for deletion
+            }
+
+            await _context.SaveChangesAsync(); // Commit changes
+        }
+
         // Search books
         public async Task<IEnumerable<Book>> SearchBooksAsync(string query)
         {
@@ -48,6 +60,17 @@ namespace BookServiceServer.Services
                     // Fuzzy match, for misspelling
                     Fuzz.Ratio(b.Title, query) >= 80 ||
                     Fuzz.Ratio(b.Author, query) >= 80);
+        }
+
+        public async Task<Book> GetBookByIdAsync(int id)
+        {
+            return await _context.MyBooks.FindAsync(id);
+        }
+
+        public async Task UpdateBookAsync(Book book)
+        {
+            _context.MyBooks.Update(book);
+            await _context.SaveChangesAsync();
         }
     }
 }

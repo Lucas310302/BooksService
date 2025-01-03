@@ -16,6 +16,11 @@ using System.Windows.Shapes;
 using System.Net.Http.Json;
 using System.Net.Http.Headers;
 using BookServiceClient.Dtos;
+using System.Runtime.CompilerServices;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using Microsoft.Win32;
+using System.IO;
 
 namespace BookServiceClient
 {
@@ -25,12 +30,15 @@ namespace BookServiceClient
     public partial class MainWindow : Window
     {
         private readonly HttpClient _httpClient;
+        private string _token;
 
         public MainWindow()
         {
             InitializeComponent();
 
-            LoginGrid.Visibility = Visibility.Collapsed;
+            LoginGrid.Visibility = Visibility.Visible;
+            HeaderGrid.Visibility = Visibility.Collapsed;
+            BooksGrid.Visibility = Visibility.Collapsed;
 
             var handler = new HttpClientHandler
             {
@@ -38,9 +46,6 @@ namespace BookServiceClient
             };
 
             _httpClient = new HttpClient(handler) { BaseAddress = new Uri("https://localhost:7275") };
-
-            // Load Books on startup
-            LoadBooks();
         }
 
         private async void LoadBooks()
@@ -79,21 +84,18 @@ namespace BookServiceClient
             // Generate book element for each book
             foreach (var book in books)
             {
-                // Create border
-                Border bookBorder = new Border
+                // Create horizontal stackpanel for pdf button
+                StackPanel outerStackPanel = new StackPanel
                 {
-                    BorderBrush = Brushes.Black,
-                    BorderThickness = new Thickness(1),
-                    Margin = new Thickness(5),
-                    Padding = new Thickness(10),
-                    Background = Brushes.LightGray,
-                    Width = itemWidth
+                    Orientation = Orientation.Horizontal,
+                    HorizontalAlignment = HorizontalAlignment.Stretch
                 };
 
                 // Create a StackPanel for title and author
                 StackPanel bookStackPanel = new StackPanel
                 {
-                    Orientation = Orientation.Vertical
+                    Orientation = Orientation.Vertical,
+                    VerticalAlignment = VerticalAlignment.Center
                 };
 
                 // Title
@@ -117,17 +119,30 @@ namespace BookServiceClient
                 Image pdfBtn = new Image
                 {
                     Source = new BitmapImage(new Uri("pack://application:,,,/icons/pdf.png")),
-                    Width = 100,
-                    Height = 100
+                    Width = 35,
+                    Height = 35,
+                    HorizontalAlignment = HorizontalAlignment.Right
                 };
 
                 // Setup clickevent
                 pdfBtn.MouseLeftButtonDown += (obj, args) => PdfView_Click(obj, args, book.Id);
 
-                bookStackPanel.Children.Add(pdfBtn);
+                outerStackPanel.Children.Add(bookStackPanel);
+                outerStackPanel.Children.Add(pdfBtn);
+
+                // Create border
+                Border bookBorder = new Border
+                {
+                    BorderBrush = Brushes.Black,
+                    BorderThickness = new Thickness(1),
+                    Margin = new Thickness(5),
+                    Padding = new Thickness(10),
+                    Background = Brushes.White,
+                    Width = itemWidth
+                };
 
                 // Add Stackpanel with Title and Author to Border
-                bookBorder.Child = bookStackPanel;
+                bookBorder.Child = outerStackPanel;
 
                 // Add the border to the BooksPanel
                 BooksPanel.Children.Add(bookBorder);
@@ -173,6 +188,34 @@ namespace BookServiceClient
             }
         }
 
+        private string ParseJwtToken()
+        {
+            var handler = new JwtSecurityTokenHandler();
+            if (handler.CanReadToken(_token))
+            {
+                var jwtToken = handler.ReadJwtToken(_token); // Decoder for token
+
+                // Extract role
+                var roleClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == "role" || c.Type == ClaimTypes.Role);
+                var role = roleClaim?.Value;
+
+                if (role != null)
+                {
+                    return role;
+                }
+                else
+                {
+                    MessageBox.Show("Role not found in the token");
+                    return null;
+                }
+            }
+            else
+            {
+                MessageBox.Show("Invalid token format");
+                return null;
+            }
+        }
+
         private async void LoginButton_Click(object sender, RoutedEventArgs e)
         {
             var username = UsernameInput.Text;
@@ -197,19 +240,26 @@ namespace BookServiceClient
 
                 if (response.IsSuccessStatusCode)
                 {
-                    var token = await response.Content.ReadAsStringAsync();
+                    _token = await response.Content.ReadAsStringAsync();
 
-                    if (!string.IsNullOrEmpty(token))
+                    if (!string.IsNullOrEmpty(_token))
                     {
                         // Store token in memory
-                        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+
+                        // Loadbooks when token is fetched
+                        LoadBooks();
 
                         // Hide login and show books
                         LoginGrid.Visibility = Visibility.Collapsed;
                         HeaderGrid.Visibility = Visibility.Visible;
-                        AllBooksPage.Visibility = Visibility.Visible;
+                        BooksGrid.Visibility = Visibility.Visible;
 
-                        MessageBox.Show("Login successful");
+                        // Check if admin if user should have admin controls
+                        if (ParseJwtToken() == "Admin")
+                            AdminBtn.Visibility = Visibility.Visible;
+                        else
+                            AdminBtn.Visibility = Visibility.Collapsed;
                     }
                     else
                     {
@@ -231,30 +281,66 @@ namespace BookServiceClient
             }
         }
 
+        private void OpenAccPanel_Click(object sender, RoutedEventArgs e)
+        {
+            var role = ParseJwtToken();
+
+            if (role == "Admin")
+            {
+                var adminpanel = new AdminPanel(_token, _httpClient);
+                adminpanel.Show();
+            }
+        }
+
         private void ViewAllBooks_Click(object sender, RoutedEventArgs e)
         {
             LoadBooks();
         }
 
-        private void PdfView_Click(object sender, RoutedEventArgs e, int Id)
+        private async void PdfView_Click(object sender, RoutedEventArgs e, int Id)
         {
-            MessageBox.Show(Id.ToString());
-        }
+            if (ParseJwtToken() == "Admin")
+            {
+                MessageBox.Show($"ID: {Id.ToString()}");
 
-        private void AccountBtn_Click(object sender, RoutedEventArgs e)
-        {
-            // Hide everything except the login screen
-            HeaderGrid.Visibility = Visibility.Collapsed;
-            AllBooksPage.Visibility = Visibility.Collapsed;
-            LoginGrid.Visibility = Visibility.Visible;
-        }
+                var result = MessageBox.Show("Do you want to download the PDF?", "Download Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
-        private void AccBackButton_Click(object sender, RoutedEventArgs e)
-        {
-            // Go back from the login screen
-            LoginGrid.Visibility = Visibility.Collapsed;
-            AllBooksPage.Visibility = Visibility.Visible;
-            HeaderGrid.Visibility = Visibility.Visible;
+                if (result == MessageBoxResult.No)
+                {
+                    return;
+                }
+            }
+
+            try
+            {
+                var response = await _httpClient.GetAsync($"api/Books/download/{Id}");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var content = await response.Content.ReadAsByteArrayAsync();
+
+                    var saveFileDialog = new SaveFileDialog
+                    {
+                        FileName = $"{Id}.pdf",
+                        DefaultExt = ".pdf",
+                        Filter = "PDF documents (.pdf)|*.pdf"
+                    };
+
+                    if (saveFileDialog.ShowDialog() == true)
+                    {
+                        File.WriteAllBytes(saveFileDialog.FileName, content);
+                        MessageBox.Show("PDF download successfully", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show($"Failed to download PDF: {response.ReasonPhrase}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occured: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         public class Book
